@@ -869,6 +869,11 @@ body {
     margin-bottom: 1rem;
 }
 
+.footer-logo-image {
+    height: 2rem;
+    width: auto;
+}
+
 .footer-logo-icon {
     width: 2rem;
     height: 2rem;
