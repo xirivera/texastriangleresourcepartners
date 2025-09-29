@@ -45,6 +45,11 @@ function setActiveService(serviceType) {
     document.getElementById(`content-${serviceType}`).classList.add('active');
 }
 
+// Initialize EmailJS
+(function() {
+    emailjs.init('EJcYq0Wg8xoDkZIgQ');
+})();
+
 // Quote Form Submission
 document.addEventListener('DOMContentLoaded', function() {
     const quoteForm = document.getElementById('quoteForm');
@@ -53,39 +58,38 @@ document.addEventListener('DOMContentLoaded', function() {
         quoteForm.addEventListener('submit', function(e) {
             e.preventDefault();
 
-            const formData = new FormData(quoteForm);
-            const data = {};
-            formData.forEach((value, key) => {
-                data[key] = value;
-            });
+            const submitButton = quoteForm.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.textContent;
+            submitButton.textContent = 'Sending...';
+            submitButton.disabled = true;
 
-            // Create email body
-            const emailBody = `
-New Quote Request from ${data.companyName}
+            // Prepare template parameters
+            const templateParams = {
+                company_name: quoteForm.companyName.value,
+                contact_name: quoteForm.contactName.value,
+                email: quoteForm.email.value,
+                phone: quoteForm.phone.value || 'Not provided',
+                material_type: quoteForm.materialType.value || 'Not specified',
+                quantity: quoteForm.quantity.value || 'Not specified',
+                frequency: quoteForm.frequency.value || 'Not specified',
+                location: quoteForm.location.value || 'Not specified',
+                message: quoteForm.message.value || 'No additional requirements'
+            };
 
-Contact Information:
-- Name: ${data.contactName}
-- Email: ${data.email}
-- Phone: ${data.phone}
-
-Request Details:
-- Material Type: ${data.materialType}
-- Quantity: ${data.quantity}
-- Frequency: ${data.frequency}
-- Location: ${data.location}
-
-Additional Requirements:
-${data.message}
-            `.trim();
-
-            // Open email client
-            window.location.href = `mailto:quotes@txtrirp.com?subject=Quote Request from ${encodeURIComponent(data.companyName)}&body=${encodeURIComponent(emailBody)}`;
-
-            // Show success message
-            alert('Thank you for your quote request! We will contact you within 24 hours.');
-
-            // Reset form
-            quoteForm.reset();
+            // Send email using EmailJS
+            emailjs.send('service_s1uqagc', 'template_iarewgh', templateParams)
+                .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                    alert('Thank you for your quote request! We will contact you within 24 hours.');
+                    quoteForm.reset();
+                    submitButton.textContent = originalButtonText;
+                    submitButton.disabled = false;
+                }, function(error) {
+                    console.error('FAILED...', error);
+                    alert('Sorry, there was an error sending your request. Please try again or email us directly at quotes@txtrirp.com');
+                    submitButton.textContent = originalButtonText;
+                    submitButton.disabled = false;
+                });
         });
     }
 });
