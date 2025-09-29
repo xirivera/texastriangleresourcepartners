@@ -79,7 +79,7 @@ ${data.message}
             `.trim();
 
             // Open email client
-            window.location.href = `mailto:xir@txtrirp.com?subject=Quote Request from ${encodeURIComponent(data.companyName)}&body=${encodeURIComponent(emailBody)}`;
+            window.location.href = `mailto:quotes@txtrirp.com?subject=Quote Request from ${encodeURIComponent(data.companyName)}&body=${encodeURIComponent(emailBody)}`;
 
             // Show success message
             alert('Thank you for your quote request! We will contact you within 24 hours.');
