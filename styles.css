@@ -40,6 +40,11 @@ body {
     gap: 0.5rem;
 }
 
+.logo-image {
+    height: 2.5rem;
+    width: auto;
+}
+
 .logo-icon {
     width: 2.5rem;
     height: 2.5rem;
