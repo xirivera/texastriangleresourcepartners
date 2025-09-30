@@ -82,6 +82,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 message: quoteForm.message.value || 'No additional requirements'
             };
 
+            console.log('Sending template parameters:', templateParams);
+
             // Send email using EmailJS
             emailjs.send('service_s1uqagc', 'template_iarewgh', templateParams)
                 .then(function(response) {
