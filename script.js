@@ -45,18 +45,24 @@ function setActiveService(serviceType) {
     document.getElementById(`content-${serviceType}`).classList.add('active');
 }
 
-// Initialize EmailJS
-(function() {
-    emailjs.init('EJcYq0Wg8xoDkZIgQ');
-})();
-
 // Quote Form Submission
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize EmailJS after DOM is loaded
+    if (typeof emailjs !== 'undefined') {
+        emailjs.init('EJcYq0Wg8xoDkZIgQ');
+    }
+
     const quoteForm = document.getElementById('quoteForm');
 
     if (quoteForm) {
         quoteForm.addEventListener('submit', function(e) {
             e.preventDefault();
+
+            // Check if EmailJS is available
+            if (typeof emailjs === 'undefined') {
+                alert('Email service is not available. Please try again later or email us directly at quotes@txtrirp.com');
+                return;
+            }
 
             const submitButton = quoteForm.querySelector('button[type="submit"]');
             const originalButtonText = submitButton.textContent;
